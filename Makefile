@@ -5,14 +5,18 @@ ifndef CONFIG
   CONFIG=Debug
 endif
 
+ifeq ($(PKG_CONFIG),)
+PKG_CONFIG := $(shell which pkg-config)
+endif
+
 CC = gcc
 CXX = g++
 CHOST = $(shell $(CROSS_COMPILE)$(CC) -dumpmachine)
-CFLAGS = -I../../Sources/JUCE-new/modules -I. -I JuceLibraryCode $(shell $(CROSS_COMPILE)pkg-config --cflags freetype2)
-CXXFLAGS = $(CFLAGS)
+CFLAGS = -I ../../Sources/JUCE-new/modules -I . -I Source/serial/include -I JuceLibraryCode $(shell $(CROSS_COMPILE)pkg-config --cflags freetype2)
+CXXFLAGS = $(CFLAGS) -std=c++11
 LDFLAGS = -static-libgcc -static-libstdc++
 LIBS = $(shell $(CROSS_COMPILE)pkg-config --libs freetype2)
-DEFS = 
+DEFS = -DJUCE_APP_CONFIG_HEADER=\"JuceHeader.h\" -DJUCE_API=
 
 SYSTEM := $(word 2,$(subst -, ,$(CHOST)))
 ifeq ($(SYSTEM),w64)
@@ -23,6 +27,8 @@ ifeq ($(SYSTEM),pc)
 endif
 
 $(info CHOST: $(CHOST))
+$(info PKG_CONFIG: $(PKG_CONFIG))
+$(info PKG_CONFIG_PATH: $(PKG_CONFIG_PATH))
 $(info SYSTEM: $(SYSTEM))
 
 OUTDIR := build/$(CHOST)
@@ -50,13 +56,13 @@ ifeq ($(SYSTEM),linux)
   DEFS += -DLINUX=1
 endif
 
-SerialScope_OBJECTS = $(OBJDIR)/list_ports_linux.o $(OBJDIR)/list_ports_osx.o $(OBJDIR)/list_ports_win.o $(OBJDIR)/unix.o $(OBJDIR)/win.o $(OBJDIR)/serial.o $(OBJDIR)/Oscilloscope.o $(OBJDIR)/MainComponent.o $(OBJDIR)/Main.o $(OBJDIR)/BinaryData.o $(OBJDIR)/juce_core.o $(OBJDIR)/juce_events.o $(OBJDIR)/juce_graphics.o $(OBJDIR)/juce_data_structures.o $(OBJDIR)/juce_gui_basics.o $(OBJDIR)/juce_gui_extra.o $(OBJDIR)/juce_cryptography.o $(OBJDIR)/juce_video.o $(OBJDIR)/juce_opengl.o
+SerialScope_OBJECTS = $(OBJDIR)/list_ports_linux.o $(OBJDIR)/list_ports_osx.o $(OBJDIR)/list_ports_win.o $(OBJDIR)/unix.o $(OBJDIR)/win.o $(OBJDIR)/serial.o $(OBJDIR)/Oscilloscope.o $(OBJDIR)/MainComponent.o $(OBJDIR)/Main.o $(OBJDIR)/juce_core.o $(OBJDIR)/juce_events.o $(OBJDIR)/juce_graphics.o $(OBJDIR)/juce_data_structures.o $(OBJDIR)/juce_gui_basics.o $(OBJDIR)/juce_gui_extra.o $(OBJDIR)/juce_cryptography.o $(OBJDIR)/juce_video.o $(OBJDIR)/juce_opengl.o
 
 all: $(OBJDIR) $(BINDIR)/SerialScope
 $(OBJDIR):
 	mkdir -p $@
 
-$(BINDIR)/SerialScope: $(OBJDIR)/list_ports_linux.o $(OBJDIR)/list_ports_osx.o $(OBJDIR)/list_ports_win.o $(OBJDIR)/unix.o $(OBJDIR)/win.o $(OBJDIR)/serial.o $(OBJDIR)/Oscilloscope.o $(OBJDIR)/MainComponent.o $(OBJDIR)/Main.o $(OBJDIR)/BinaryData.o $(OBJDIR)/juce_core.o $(OBJDIR)/juce_events.o $(OBJDIR)/juce_graphics.o $(OBJDIR)/juce_data_structures.o $(OBJDIR)/juce_gui_basics.o $(OBJDIR)/juce_gui_extra.o $(OBJDIR)/juce_cryptography.o $(OBJDIR)/juce_video.o $(OBJDIR)/juce_opengl.o
+$(BINDIR)/SerialScope: $(OBJDIR)/list_ports_linux.o $(OBJDIR)/list_ports_osx.o $(OBJDIR)/list_ports_win.o $(OBJDIR)/unix.o $(OBJDIR)/win.o $(OBJDIR)/serial.o $(OBJDIR)/Oscilloscope.o $(OBJDIR)/MainComponent.o $(OBJDIR)/Main.o $(OBJDIR)/juce_core.o $(OBJDIR)/juce_events.o $(OBJDIR)/juce_graphics.o $(OBJDIR)/juce_data_structures.o $(OBJDIR)/juce_gui_basics.o $(OBJDIR)/juce_gui_extra.o $(OBJDIR)/juce_cryptography.o $(OBJDIR)/juce_video.o $(OBJDIR)/juce_opengl.o
 	$(CXX) $(LDFLAGS) $(CFLAGS) -o $@ $^ $(LIBS)
 
 $(OBJDIR)/list_ports_linux.o: Source/serial/src/impl/list_ports/list_ports_linux.cc
@@ -86,7 +92,7 @@ $(OBJDIR)/MainComponent.o: Source/MainComponent.cpp
 $(OBJDIR)/Main.o: Source/Main.cpp
 	$(CXX) $(DEFS) $(CXXFLAGS) -c -o "$@" "$<"
 
-$(OBJDIR)/BinaryData.o: JuceLibraryCode/BinaryData.cpp
+#$(OBJDIR)/BinaryData.o: JuceLibraryCode/BinaryData.cpp
 	$(CXX) $(DEFS) $(CXXFLAGS) -c -o "$@" "$<"
 
 $(OBJDIR)/juce_core.o: ../../Sources/JUCE-new/modules/juce_core/juce_core.cpp
