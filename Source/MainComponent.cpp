@@ -13,6 +13,15 @@
 MainContentComponent::MainContentComponent()
 {
     setSize (600, 400);
+    
+    try {
+        serialPort = new serial::Serial("COM14", 38400);
+    } catch (const  serial::PortNotOpenedException& e) {
+    	AlertWindow::showMessageBox (AlertWindow::InfoIcon, "Info!", "Failed to open serial port");
+    //} catch(const serial::IOException& s_io_e) {
+    } catch( const std::exception& e) {
+      	AlertWindow::showMessageBox (AlertWindow::WarningIcon , "Exception", e.what());
+    }
 }
 
 MainContentComponent::~MainContentComponent()

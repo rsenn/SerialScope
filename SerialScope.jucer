@@ -2,9 +2,28 @@
 
 <JUCERPROJECT id="zi1rQO" name="SerialScope" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.SerialScope" includeBinaryInAppConfig="1"
-              jucerVersion="4.1.0">
+              jucerVersion="4.2.1">
   <MAINGROUP id="GIt9Rh" name="SerialScope">
     <GROUP id="{F9CF7E15-BA4A-1A09-1747-73B1457F9512}" name="Source">
+      <GROUP id="{05E46639-4F14-19E0-D4A9-174315E82D5F}" name="serial">
+        <GROUP id="{6A8452EC-8742-72E2-0D57-9C562EE2C995}" name="impl">
+          <FILE id="EYNKNJ" name="win.h" compile="0" resource="0" file="../../Source/serial/include/serial/impl/win.h"/>
+          <FILE id="eimUBL" name="unix.h" compile="0" resource="0" file="../../Source/serial/include/serial/impl/unix.h"/>
+          <GROUP id="{77C1F3F4-A5F9-0312-F0F1-058825C394EF}" name="list_ports">
+            <FILE id="UbFRRN" name="list_ports_linux.cc" compile="1" resource="0"
+                  file="Source/serial/src/impl/list_ports/list_ports_linux.cc"/>
+            <FILE id="OzEacH" name="list_ports_osx.cc" compile="1" resource="0"
+                  file="Source/serial/src/impl/list_ports/list_ports_osx.cc"/>
+            <FILE id="yEJzid" name="list_ports_win.cc" compile="1" resource="0"
+                  file="Source/serial/src/impl/list_ports/list_ports_win.cc"/>
+          </GROUP>
+          <FILE id="jt7Mfs" name="unix.cc" compile="1" resource="0" file="Source/serial/src/impl/unix.cc"/>
+          <FILE id="yj8qSE" name="win.cc" compile="1" resource="0" file="Source/serial/src/impl/win.cc"/>
+        </GROUP>
+        <FILE id="scPukd" name="serial.cc" compile="1" resource="0" file="Source/serial/src/serial.cc"/>
+        <FILE id="o2of8v" name="serial.h" compile="0" resource="0" file="Source/serial/include/serial/serial.h"/>
+        <FILE id="AkNhkk" name="v8stdint.h" compile="0" resource="0" file="Source/serial/include/serial/v8stdint.h"/>
+      </GROUP>
       <FILE id="IYXsmq" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="x3afwB" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
@@ -12,100 +31,103 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <VS2015 targetFolder="Builds/VisualStudio2015">
+    <VS2015 targetFolder="Builds/VisualStudio2015" externalLibraries="setupapi.lib">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="SerialScope"/>
+                       isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="SerialScope"/>
+                       isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../JuceSources/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_events" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_video" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Sources/JUCE-new/modules"/>
       </MODULEPATHS>
     </VS2015>
     <VS2013 targetFolder="Builds/VisualStudio2013">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="SerialScope"/>
+                       isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="SerialScope"/>
+                       isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../JuceSources/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_events" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_video" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Sources/JUCE-new/modules"/>
       </MODULEPATHS>
     </VS2013>
     <LINUX_MAKE targetFolder="Builds/Linux" packages="freetype2">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="SerialScope"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"
+                       headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="SerialScope"
+                       headerPath="../../Source/serial/include"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../JuceSources/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_events" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_video" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Sources/JUCE-new/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
     <CODEBLOCKS_LINUX targetFolder="Builds/CodeBlocksLinux">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="SerialScope"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"
+                       headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="SerialScope"
+                       headerPath="../../Source/serial/include"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../JuceSources/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../JuceSources/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_events" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_video" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Sources/JUCE-new/modules"/>
       </MODULEPATHS>
     </CODEBLOCKS_LINUX>
+    <MINGW_MAKE targetFolder="Builds/MinGW" externalLibraries="setupapi">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"
+                       headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="SerialScope"
+                       headerPath="../../Source/serial/include"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_events" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../Sources/JUCE-new/modules"/>
+        <MODULEPATH id="juce_core" path="../../Sources/JUCE-new/modules"/>
+      </MODULEPATHS>
+    </MINGW_MAKE>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
@@ -117,4 +139,7 @@
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

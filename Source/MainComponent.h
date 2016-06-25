@@ -10,7 +10,7 @@
 #define MAINCOMPONENT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
+#include "serial/serial.h"
 
 //==============================================================================
 /*
@@ -28,6 +28,9 @@ public:
     void resized() override;
 
 private:
+
+    ScopedPointer<serial::Serial> serialPort;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
