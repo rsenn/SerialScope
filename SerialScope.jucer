@@ -5,25 +5,36 @@
               jucerVersion="4.2.1">
   <MAINGROUP id="GIt9Rh" name="SerialScope">
     <GROUP id="{F9CF7E15-BA4A-1A09-1747-73B1457F9512}" name="Source">
-      <GROUP id="{05E46639-4F14-19E0-D4A9-174315E82D5F}" name="serial">
-        <GROUP id="{6A8452EC-8742-72E2-0D57-9C562EE2C995}" name="impl">
-          <FILE id="EYNKNJ" name="win.h" compile="0" resource="0" file="../../Source/serial/include/serial/impl/win.h"/>
-          <FILE id="eimUBL" name="unix.h" compile="0" resource="0" file="../../Source/serial/include/serial/impl/unix.h"/>
-          <GROUP id="{77C1F3F4-A5F9-0312-F0F1-058825C394EF}" name="list_ports">
-            <FILE id="UbFRRN" name="list_ports_linux.cc" compile="1" resource="0"
-                  file="Source/serial/src/impl/list_ports/list_ports_linux.cc"/>
-            <FILE id="OzEacH" name="list_ports_osx.cc" compile="1" resource="0"
-                  file="Source/serial/src/impl/list_ports/list_ports_osx.cc"/>
-            <FILE id="yEJzid" name="list_ports_win.cc" compile="1" resource="0"
-                  file="Source/serial/src/impl/list_ports/list_ports_win.cc"/>
+      <GROUP id="{39620207-398F-EF58-D40D-E44DC268A07A}" name="serial">
+        <GROUP id="{EAF69A4F-2D46-512F-8BDE-41953879FF54}" name="include">
+          <GROUP id="{50B17645-ED28-E93F-CAF4-10C856169D29}" name="serial">
+            <GROUP id="{F4943654-81EC-F145-090C-876CF2976E0E}" name="impl">
+              <FILE id="BmU2jK" name="unix.h" compile="0" resource="0" file="Source/serial/include/serial/impl/unix.h"/>
+              <FILE id="i8eAAu" name="win.h" compile="0" resource="0" file="Source/serial/include/serial/impl/win.h"/>
+            </GROUP>
+            <FILE id="LxMmcx" name="serial.h" compile="0" resource="0" file="Source/serial/include/serial/serial.h"/>
+            <FILE id="mu1CfQ" name="v8stdint.h" compile="0" resource="0" file="Source/serial/include/serial/v8stdint.h"/>
           </GROUP>
-          <FILE id="jt7Mfs" name="unix.cc" compile="1" resource="0" file="Source/serial/src/impl/unix.cc"/>
-          <FILE id="yj8qSE" name="win.cc" compile="1" resource="0" file="Source/serial/src/impl/win.cc"/>
         </GROUP>
-        <FILE id="scPukd" name="serial.cc" compile="1" resource="0" file="Source/serial/src/serial.cc"/>
-        <FILE id="o2of8v" name="serial.h" compile="0" resource="0" file="Source/serial/include/serial/serial.h"/>
-        <FILE id="AkNhkk" name="v8stdint.h" compile="0" resource="0" file="Source/serial/include/serial/v8stdint.h"/>
+        <GROUP id="{17286783-F4B7-624F-BBBD-6116AEB33EF2}" name="src">
+          <GROUP id="{B172F10A-85B7-73F5-31BF-60835857276D}" name="impl">
+            <GROUP id="{90CBE200-F800-5CA2-1CA8-1E5E9DE6A17A}" name="list_ports">
+              <FILE id="Ok0INo" name="list_ports_linux.cc" compile="1" resource="0"
+                    file="Source/serial/src/impl/list_ports/list_ports_linux.cc"/>
+              <FILE id="qizbVB" name="list_ports_osx.cc" compile="1" resource="0"
+                    file="Source/serial/src/impl/list_ports/list_ports_osx.cc"/>
+              <FILE id="FOd35I" name="list_ports_win.cc" compile="1" resource="0"
+                    file="Source/serial/src/impl/list_ports/list_ports_win.cc"/>
+            </GROUP>
+            <FILE id="clcQFo" name="unix.cc" compile="1" resource="0" file="Source/serial/src/impl/unix.cc"/>
+            <FILE id="wn1yYi" name="win.cc" compile="1" resource="0" file="Source/serial/src/impl/win.cc"/>
+          </GROUP>
+          <FILE id="VngHkh" name="serial.cc" compile="1" resource="0" file="Source/serial/src/serial.cc"/>
+        </GROUP>
       </GROUP>
+      <FILE id="qAYuf4" name="Oscilloscope.cpp" compile="1" resource="0"
+            file="Source/Oscilloscope.cpp"/>
+      <FILE id="xdRMAy" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
       <FILE id="IYXsmq" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="x3afwB" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>

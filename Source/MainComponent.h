@@ -11,6 +11,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "serial/serial.h"
+#include "Oscilloscope.h"
 
 //==============================================================================
 /*
@@ -28,6 +29,7 @@ public:
     void resized() override;
 
 private:
+    ScopedPointer<Oscilloscope> scope;
 
     ScopedPointer<serial::Serial> serialPort;
 

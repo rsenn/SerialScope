@@ -22,6 +22,8 @@ MainContentComponent::MainContentComponent()
     } catch( const std::exception& e) {
       	AlertWindow::showMessageBox (AlertWindow::WarningIcon , "Exception", e.what());
     }
+
+    
 }
 
 MainContentComponent::~MainContentComponent()

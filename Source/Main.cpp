@@ -29,6 +29,26 @@ public:
         // This method is where you should put your application's initialisation code..
 
         mainWindow = new MainWindow (getApplicationName());
+        
+        std::vector<serial::PortInfo> serialports = serial::list_ports();
+        
+        for(auto& s : serialports) {
+            
+//         Logger::logMessage(String::formatted("Port: %s Description: %s", s.port.c_str(), s.description.c_str()));
+    std::cerr <<      String::formatted("Port: %s Description: %s", s.port.c_str(), s.description.c_str()) << std::endl;
+        }
+        
+        try {
+            serialPort = new serial::Serial("COM14", 38400);
+        } catch (const  serial::PortNotOpenedException& e) {
+    	    AlertWindow::showMessageBox (AlertWindow::InfoIcon, "Info!", "Failed to open serial port");
+      	    quit();
+    //} catch(const serial::IOException& s_io_e) {
+        } catch( const std::exception& e) {
+      	    AlertWindow::showMessageBox (AlertWindow::WarningIcon , "Exception", e.what());
+      	    quit();
+        }
+
     }
 
     void shutdown() override
@@ -93,6 +113,8 @@ public:
 
 private:
     ScopedPointer<MainWindow> mainWindow;
+    
+    ScopedPointer<serial::Serial> serialPort;
 };
 
 //==============================================================================
