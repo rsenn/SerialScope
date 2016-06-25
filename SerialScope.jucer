@@ -5,33 +5,11 @@
               jucerVersion="4.2.1">
   <MAINGROUP id="GIt9Rh" name="SerialScope">
     <GROUP id="{F9CF7E15-BA4A-1A09-1747-73B1457F9512}" name="Source">
-      <GROUP id="{39620207-398F-EF58-D40D-E44DC268A07A}" name="serial">
-        <GROUP id="{EAF69A4F-2D46-512F-8BDE-41953879FF54}" name="include">
-          <GROUP id="{50B17645-ED28-E93F-CAF4-10C856169D29}" name="serial">
-            <GROUP id="{F4943654-81EC-F145-090C-876CF2976E0E}" name="impl">
-              <FILE id="BmU2jK" name="unix.h" compile="0" resource="0" file="Source/serial/include/serial/impl/unix.h"/>
-              <FILE id="i8eAAu" name="win.h" compile="0" resource="0" file="Source/serial/include/serial/impl/win.h"/>
-            </GROUP>
-            <FILE id="LxMmcx" name="serial.h" compile="0" resource="0" file="Source/serial/include/serial/serial.h"/>
-            <FILE id="mu1CfQ" name="v8stdint.h" compile="0" resource="0" file="Source/serial/include/serial/v8stdint.h"/>
-          </GROUP>
-        </GROUP>
-        <GROUP id="{17286783-F4B7-624F-BBBD-6116AEB33EF2}" name="src">
-          <GROUP id="{B172F10A-85B7-73F5-31BF-60835857276D}" name="impl">
-            <GROUP id="{90CBE200-F800-5CA2-1CA8-1E5E9DE6A17A}" name="list_ports">
-              <FILE id="Ok0INo" name="list_ports_linux.cc" compile="1" resource="0"
-                    file="Source/serial/src/impl/list_ports/list_ports_linux.cc"/>
-              <FILE id="qizbVB" name="list_ports_osx.cc" compile="1" resource="0"
-                    file="Source/serial/src/impl/list_ports/list_ports_osx.cc"/>
-              <FILE id="FOd35I" name="list_ports_win.cc" compile="1" resource="0"
-                    file="Source/serial/src/impl/list_ports/list_ports_win.cc"/>
-            </GROUP>
-            <FILE id="clcQFo" name="unix.cc" compile="1" resource="0" file="Source/serial/src/impl/unix.cc"/>
-            <FILE id="wn1yYi" name="win.cc" compile="1" resource="0" file="Source/serial/src/impl/win.cc"/>
-          </GROUP>
-          <FILE id="VngHkh" name="serial.cc" compile="1" resource="0" file="Source/serial/src/serial.cc"/>
-        </GROUP>
+      <GROUP id="{C44FE864-6FA4-2FD3-5569-20D64A0E19E2}" name="serialib">
+        <FILE id="XsSnXx" name="Example1.cpp" compile="0" resource="0" file="Source/serialib/Example1.cpp"/>
+        <FILE id="X2v8ZU" name="serialib.h" compile="0" resource="0" file="Source/serialib/serialib.h"/>
       </GROUP>
+      <FILE id="amBibL" name="serialib.cpp" compile="1" resource="0" file="Source/serialib/serialib.cpp"/>
       <FILE id="qAYuf4" name="Oscilloscope.cpp" compile="1" resource="0"
             file="Source/Oscilloscope.cpp"/>
       <FILE id="xdRMAy" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
@@ -42,11 +20,16 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <VS2015 targetFolder="Builds/VisualStudio2015" externalLibraries="setupapi.lib">
+    <VS2015 targetFolder="Builds/VisualStudio2015" externalLibraries="setupapi.lib"
+            extraDefs="WIN32&#10;_WINDOWS&#10;_MBCS">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Debug64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Release64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
                        isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
@@ -65,7 +48,11 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Debug64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
+        <CONFIGURATION name="Release64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
                        isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
@@ -118,7 +105,7 @@
         <MODULEPATH id="juce_opengl" path="../../Sources/JUCE-new/modules"/>
       </MODULEPATHS>
     </CODEBLOCKS_LINUX>
-    <MINGW_MAKE targetFolder="Builds/MinGW" externalLibraries="setupapi">
+    <MINGW_MAKE targetFolder="Builds/MinGW" externalLibraries="setupapi" extraDefs="WIN32&#10;_WINDOWS&#10;_MBCS">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"
                        headerPath="../../Source/serial/include"/>

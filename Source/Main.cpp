@@ -26,10 +26,16 @@ public:
     //==============================================================================
     void initialise (const String& commandLine) override
     {
+        if(commandLine.startsWith("COM")) {
+            comPort = commandLine;
+        } else {
+            comPort = "COM1";
+        }
+        
         // This method is where you should put your application's initialisation code..
 
         mainWindow = new MainWindow (getApplicationName());
-        
+        /*
         std::vector<serial::PortInfo> serialports = serial::list_ports();
         
         for(auto& s : serialports) {
@@ -48,6 +54,8 @@ public:
       	    AlertWindow::showMessageBox (AlertWindow::WarningIcon , "Exception", e.what());
       	    quit();
         }
+*/
+
 
     }
 
@@ -86,10 +94,15 @@ public:
                                                     DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainContentComponent(), true);
+             MainContentComponent* content = new MainContentComponent();
 
+             setContentOwned (content, true);
             centreWithSize (getWidth(), getHeight());
             setVisible (true);
+            
+                if(!content->startPlotting(comPort)) {
+                    quit();
+                }
         }
 
         void closeButtonPressed() override
@@ -112,10 +125,12 @@ public:
     };
 
 private:
+    static String comPort;
     ScopedPointer<MainWindow> mainWindow;
     
-    ScopedPointer<serial::Serial> serialPort;
 };
+
+String SerialScopeApplication::comPort;
 
 //==============================================================================
 // This macro generates the main() routine that launches the app.

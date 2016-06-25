@@ -32,17 +32,13 @@ public:
     }
     
     //==========================================================================
-    void pushBuffer (const float* data, int numSamples)
-    {
-        for (int i = 0; i < numSamples; ++i)
-            buffer[++writePos % buffer.size()] = data[i];
-    }
+void pushBuffer(const float* data, int numSamples);
     
     //==========================================================================
     void paint (Graphics& g) override
     {
         g.fillAll (Colours::black);
-        Rectangle<int> r = getLocalBounds();
+        juce::Rectangle<int> r = getLocalBounds();
         Path path;
         path.startNewSubPath (0, 0.5 * r.getHeight());
         const float bufferYscale = 3.0;
@@ -84,7 +80,4 @@ private:
     const int bufferSize = 16384;
     const int paintSize = 256;
 };
-
-
-
 #endif  // OSCILLOSCOPE_H_INCLUDED
