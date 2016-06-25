@@ -1,0 +1,5 @@
+#ifndef JUCE_APPCONFIG_H
+#define JUCE_APPCONFIG_H
+
+
+#endif //JUCE_APPCONFIG_H
