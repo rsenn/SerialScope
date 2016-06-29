@@ -47,10 +47,10 @@ bool MainContentComponent::startPlotting(const String& port) {
 void MainContentComponent::paint (Graphics& g)
 {
     g.fillAll (Colour (0xff001F36));
-/*
+
     g.setFont (Font (16.0f));
     g.setColour (Colours::white);
-    g.drawText ("Hello World!", getLocalBounds(), Justification::centred, true);*/
+    g.drawText ("value: " + String(value), juce::Rectangle<int>(0,0, 40, getLocalBounds().getWidth()), Justification::left, true);
     
 }
 
@@ -72,35 +72,41 @@ void MainContentComponent::fillQueue() {
 }
 
 //==========================================================================
-void MainContentComponent::timerCallback()
-{
+void MainContentComponent::timerCallback() {
 
-      fillQueue();
+	fillQueue();
 
+	while (recvQueue.size() >= 3) {
 
-      while(recvQueue.size() >= 3) {
+		unsigned int newval;
 
-          unsigned int newval;
+		if (recvQueue.front() != 0xff) {
+			recvQueue.pop_front();
+			continue;
+		}
 
-          if(recvQueue.front() != 0xff) {
-              recvQueue.pop_front();
-              continue;
-          }
-          
-          
-          recvQueue.pop_front();
-          newval = recvQueue.front();
-          if(newval & 0xc0) continue;
-          newval <<= 6;
-          recvQueue.pop_front();
-          if(recvQueue.front() & 0xc0) continue;
-          newval |= recvQueue.front();
-          recvQueue.pop_front();
-          
-          if(newval != value) {
-//                 std::cerr << "Got new value: " << String::formatted("0x%04x",newval) << std::endl;
-                 value = newval;
-          }
-      }
+		recvQueue.pop_front();
+		newval = recvQueue.front();
+		if (newval & 0xc0)
+			continue;
+		newval <<= 6;
+		recvQueue.pop_front();
+		if (recvQueue.front() & 0xc0)
+			continue;
+		newval |= recvQueue.front();
+		recvQueue.pop_front();
 
-  }
+		if (newval != value) {
+			//                 std::cerr << "Got new value: " << String::formatted("0x%04x",newval) << std::endl;
+			value = newval;
+		}
+
+	}
+
+	
+			
+	    {
+	        float f = (value / 512.0) - 1.0;
+	        scope->pushBuffer(&f, 1);
+	    }
+}
