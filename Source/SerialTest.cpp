@@ -24,13 +24,20 @@ uint64_t now() {
 void
 printCTS() {
     static int prevCTS = -2;
-
     int CTS = (int)sport.getCTS();
-
     if(prevCTS != CTS) {
-
         std::cout << "CTS = " << CTS << std::endl;
         prevCTS = CTS;
+    }
+}
+
+void
+printDSR() {
+    static int prevDSR = -2;
+    int DSR = (int)sport.getDSR();
+    if(prevDSR != DSR) {
+        std::cout << "DSR = " << DSR << std::endl;
+        prevDSR = DSR;
     }
 }
 
@@ -49,6 +56,9 @@ int main(int argc, char *argv[]) {
 
       sport.write((const uint8_t*)"\x00\xff\xff\xff\xff\xff\xff\xff", 1);
       //sport.flushOutput();
+      printCTS();
+      printDSR();
+
     }
 
 
