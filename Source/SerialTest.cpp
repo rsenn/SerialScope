@@ -43,30 +43,39 @@ printDSR() {
 
 int main(int argc, char *argv[]) {
 
+    bool rts = false, dtr = false, txd = false;
 
-  if(!sport.isOpen()) {
-  
-    std::cerr << "Port not open" << std::endl;
-    return 1;
-  }
-  sport.setRTS(true);
-    uint64_t done = now() + 2000;
 
-    while(now() < done) {
+    if(!sport.isOpen()) {
 
-      sport.write((const uint8_t*)"\x00\xff\xff\xff\xff\xff\xff\xff", 1);
-      //sport.flushOutput();
-      printCTS();
-      printDSR();
-
+        std::cerr << "Port not open" << std::endl;
+        return 1;
     }
 
+    while(1) {
 
-  for(;;) {
-    printCTS();
+        uint64_t done = now() + 500;
+        sport.setRTS(rts);
+        sport.setDTR(dtr);
 
-    sport.waitForChange();
-  }
+        while(now() < done) {
 
-return 0;
+            sport.write((const uint8_t*)(txd ? "\xff" : "\x00"), 1);
+            //sport.flushOutput();
+            printCTS();
+            printDSR();
+
+        }
+
+        rts = !rts;
+        dtr = !dtr;
+        txd = !txd;
+    }
+    for(;;) {
+        printCTS();
+
+        sport.waitForChange();
+    }
+
+    return 0;
 }
