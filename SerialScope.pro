@@ -5,6 +5,19 @@
 TEMPLATE = app
 TARGET = SerialScope
 INCLUDEPATH += .
+INCLUDEPATH += $$PWD/JuceLibraryCode $$PWD/JuceLibraryCode/modules
+INCLUDEPATH += $$PWD/Source/serial/include
+
+CONFIG += link_pkgconfig
+
+PKGCONFIG += freetype2
+PKGCONFIG += gtk+-3.0
+PKGCONFIG += webkit2gtk-4.0
+PKGCONFIG += libcurl
+
+DEFINES += LINUX=1
+
+LIBS += -lXext -lX11 -ldl
 
 # Input
 HEADERS += JuceLibraryCode/AppConfig.h \
@@ -17,31 +30,14 @@ HEADERS += JuceLibraryCode/AppConfig.h \
            Source/serial/include/serial/v8stdint.h \
            Source/serial/include/serial/impl/unix.h \
            Source/serial/include/serial/impl/win.h \
-           /JuceLibraryCode/JuceHeader.h \
+
            Source/serial/tests/proof_of_concepts
-SOURCES += JuceLibraryCode/juce_core.cpp \
-           JuceLibraryCode/juce_cryptography.cpp \
-           JuceLibraryCode/juce_data_structures.cpp \
-           JuceLibraryCode/juce_events.cpp \
-           JuceLibraryCode/juce_graphics.cpp \
-           JuceLibraryCode/juce_gui_basics.cpp \
-           JuceLibraryCode/juce_gui_extra.cpp \
-           JuceLibraryCode/juce_opengl.cpp \
-           JuceLibraryCode/juce_video.cpp \
+SOURCES += \
            Source/Main.cpp \
            Source/MainComponent.cpp \
            Source/Oscilloscope.cpp \
-           Source/SerialTest.cpp \
-           Source/serialib/Example1.cpp \
-           Source/serialib/serialib.cpp \
-           Source/serial/examples/serial_example.cc \
+            Source/serialib/serialib.cpp \
            Source/serial/src/serial.cc \
-           Source/serial/tests/unix_serial_tests.cc \
            Source/serial/src/impl/unix.cc \
            Source/serial/src/impl/win.cc \
-           Source/serial/tests/proof_of_concepts/mdc2250.cc \
-           Source/serial/tests/proof_of_concepts/tokenizer.cc \
-           Source/serial/tests/unit/unix_timer_tests.cc \
-           Source/serial/src/impl/list_ports/list_ports_linux.cc \
-           Source/serial/src/impl/list_ports/list_ports_osx.cc \
-           Source/serial/src/impl/list_ports/list_ports_win.cc
+              JuceLibraryCode/include_juce_core.cpp JuceLibraryCode/include_juce_cryptography.cpp JuceLibraryCode/include_juce_data_structures.cpp JuceLibraryCode/include_juce_events.cpp JuceLibraryCode/include_juce_graphics.cpp JuceLibraryCode/include_juce_gui_basics.cpp JuceLibraryCode/include_juce_gui_extra.cpp JuceLibraryCode/include_juce_opengl.cpp JuceLibraryCode/include_juce_video.cpp
