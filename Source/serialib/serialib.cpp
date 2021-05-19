@@ -22,50 +22,46 @@ This is a licence-free software, it can be used by anyone who try to build a bet
 #include < windows.h >
 
 #if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#define DELTA_EPOCH_IN_MICROSECS 11644473600000000Ui64
 #else
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
+#define DELTA_EPOCH_IN_MICROSECS 11644473600000000ULL
 #endif
 
-struct timezone
-{
-	int  tz_minuteswest; /* minutes W of Greenwich */
-	int  tz_dsttime;     /* type of dst correction */
+struct timezone {
+  int tz_minuteswest; /* minutes W of Greenwich */
+  int tz_dsttime;     /* type of dst correction */
 };
 
-int gettimeofday(struct timeval *tv, struct timezone *tz)
-{
-	FILETIME ft;
-	unsigned __int64 tmpres = 0;
-	static int tzflag = 0;
+int
+gettimeofday(struct timeval* tv, struct timezone* tz) {
+  FILETIME ft;
+  unsigned __int64 tmpres = 0;
+  static int tzflag = 0;
 
-	if (NULL != tv)
-	{
-		GetSystemTimeAsFileTime(&ft);
+  if(NULL != tv) {
+    GetSystemTimeAsFileTime(&ft);
 
-		tmpres |= ft.dwHighDateTime;
-		tmpres <<= 32;
-		tmpres |= ft.dwLowDateTime;
+    tmpres |= ft.dwHighDateTime;
+    tmpres <<= 32;
+    tmpres |= ft.dwLowDateTime;
 
-		tmpres /= 10;  /*convert into microseconds*/
-		/*converting file time to unix epoch*/
-		tmpres -= DELTA_EPOCH_IN_MICROSECS;
-		tv->tv_sec = (long)(tmpres / 1000000UL);
-		tv->tv_usec = (long)(tmpres % 1000000UL);
-	}
+    tmpres /= 10; /*convert into microseconds*/
+    /*converting file time to unix epoch*/
+    tmpres -= DELTA_EPOCH_IN_MICROSECS;
+    tv->tv_sec = (long)(tmpres / 1000000UL);
+    tv->tv_usec = (long)(tmpres % 1000000UL);
+  }
 
-	if (NULL != tz)
-	{
-		if (!tzflag)
-		{
-			_tzset();
-			tzflag++;
-		}
-		tz->tz_minuteswest = _timezone / 60;
-		tz->tz_dsttime = _daylight;
-	}
+  if(NULL != tz) {
+    if(!tzflag) {
+      _tzset();
+      tzflag++;
+    }
+    tz->tz_minuteswest = _timezone / 60;
+    tz->tz_dsttime = _daylight;
+  }
 
-	return 0;
+  return 0;
 }
 #endif
 
@@ -73,25 +69,19 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     \brief      Constructor of the class serialib.
 */
 // Class constructor
-serialib::serialib()
-{}
-
+serialib::serialib() {
+}
 
 /*!
     \brief      Destructor of the class serialib. It close the connection
 */
 // Class desctructor
-serialib::~serialib()
-{
-    Close();
+serialib::~serialib() {
+  Close();
 }
-
-
 
 //_________________________________________
 // ::: Configuration and initialization :::
-
-
 
 /*!
      \brief Open the serial port
@@ -136,120 +126,114 @@ serialib::~serialib()
      \return -5 error while writing port parameters
      \return -6 error while writing timeout parameters
   */
-char serialib::Open(const char *Device,const unsigned int Bauds)
-{
-#if defined (_WIN32) || defined( _WIN64)
+char
+serialib::Open(const char* Device, const unsigned int Bauds) {
+#if defined(_WIN32) || defined(_WIN64)
 
-    // Open serial port
-    
-    hSerial = CreateFileA(  Device,GENERIC_READ | GENERIC_WRITE,0,0,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,0);
-    if(hSerial==INVALID_HANDLE_VALUE) {
-        if(GetLastError()==ERROR_FILE_NOT_FOUND)
-            return -1;                                                  // Device not found
-        return -2;                                                      // Error while opening the device
-    }
+  // Open serial port
 
-    // Set parameters
-    DCB dcbSerialParams = {0};                                          // Structure for the port parameters
-    dcbSerialParams.DCBlength=sizeof(dcbSerialParams);
-    if (!GetCommState(hSerial, &dcbSerialParams))                       // Get the port parameters
-        return -3;                                                      // Error while getting port parameters
-    switch (Bauds)                                                      // Set the speed (Bauds)
-    {
-    case 110  :     dcbSerialParams.BaudRate=CBR_110; break;
-    case 300  :     dcbSerialParams.BaudRate=CBR_300; break;
-    case 600  :     dcbSerialParams.BaudRate=CBR_600; break;
-    case 1200 :     dcbSerialParams.BaudRate=CBR_1200; break;
-    case 2400 :     dcbSerialParams.BaudRate=CBR_2400; break;
-    case 4800 :     dcbSerialParams.BaudRate=CBR_4800; break;
-    case 9600 :     dcbSerialParams.BaudRate=CBR_9600; break;
-    case 14400 :    dcbSerialParams.BaudRate=CBR_14400; break;
-    case 19200 :    dcbSerialParams.BaudRate=CBR_19200; break;
-    case 38400 :    dcbSerialParams.BaudRate=CBR_38400; break;
-    case 56000 :    dcbSerialParams.BaudRate=CBR_56000; break;
-    case 57600 :    dcbSerialParams.BaudRate=CBR_57600; break;
-    case 115200 :   dcbSerialParams.BaudRate=CBR_115200; break;
-    case 128000 :   dcbSerialParams.BaudRate=CBR_128000; break;
-    case 256000 :   dcbSerialParams.BaudRate=CBR_256000; break;
-    default : return -4;
-}    
-    dcbSerialParams.ByteSize=8;                                         // 8 bit data
-    dcbSerialParams.StopBits=ONESTOPBIT;                                // One stop bit
-    dcbSerialParams.Parity=NOPARITY;                                    // No parity
-    if(!SetCommState(hSerial, &dcbSerialParams))                        // Write the parameters
-        return -5;                                                      // Error while writing
+  hSerial = CreateFileA(Device, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+  if(hSerial == INVALID_HANDLE_VALUE) {
+    if(GetLastError() == ERROR_FILE_NOT_FOUND)
+      return -1; // Device not found
+    return -2;   // Error while opening the device
+  }
 
-    // Set TimeOut
-    timeouts.ReadIntervalTimeout=0;                                     // Set the Timeout parameters
-    timeouts.ReadTotalTimeoutConstant=MAXDWORD;                         // No TimeOut
-    timeouts.ReadTotalTimeoutMultiplier=0;
-    timeouts.WriteTotalTimeoutConstant=MAXDWORD;
-    timeouts.WriteTotalTimeoutMultiplier=0;
-    if(!SetCommTimeouts(hSerial, &timeouts))                            // Write the parameters
-        return -6;                                                      // Error while writting the parameters
-    return 1;                                                           // Opening successfull
+  // Set parameters
+  DCB dcbSerialParams = {0}; // Structure for the port parameters
+  dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+  if(!GetCommState(hSerial, &dcbSerialParams)) // Get the port parameters
+    return -3;                                 // Error while getting port parameters
+  switch(Bauds)                                // Set the speed (Bauds)
+  {
+    case 110: dcbSerialParams.BaudRate = CBR_110; break;
+    case 300: dcbSerialParams.BaudRate = CBR_300; break;
+    case 600: dcbSerialParams.BaudRate = CBR_600; break;
+    case 1200: dcbSerialParams.BaudRate = CBR_1200; break;
+    case 2400: dcbSerialParams.BaudRate = CBR_2400; break;
+    case 4800: dcbSerialParams.BaudRate = CBR_4800; break;
+    case 9600: dcbSerialParams.BaudRate = CBR_9600; break;
+    case 14400: dcbSerialParams.BaudRate = CBR_14400; break;
+    case 19200: dcbSerialParams.BaudRate = CBR_19200; break;
+    case 38400: dcbSerialParams.BaudRate = CBR_38400; break;
+    case 56000: dcbSerialParams.BaudRate = CBR_56000; break;
+    case 57600: dcbSerialParams.BaudRate = CBR_57600; break;
+    case 115200: dcbSerialParams.BaudRate = CBR_115200; break;
+    case 128000: dcbSerialParams.BaudRate = CBR_128000; break;
+    case 256000: dcbSerialParams.BaudRate = CBR_256000; break;
+    default: return -4;
+  }
+  dcbSerialParams.ByteSize = 8;                // 8 bit data
+  dcbSerialParams.StopBits = ONESTOPBIT;       // One stop bit
+  dcbSerialParams.Parity = NOPARITY;           // No parity
+  if(!SetCommState(hSerial, &dcbSerialParams)) // Write the parameters
+    return -5;                                 // Error while writing
+
+  // Set TimeOut
+  timeouts.ReadIntervalTimeout = 0;             // Set the Timeout parameters
+  timeouts.ReadTotalTimeoutConstant = MAXDWORD; // No TimeOut
+  timeouts.ReadTotalTimeoutMultiplier = 0;
+  timeouts.WriteTotalTimeoutConstant = MAXDWORD;
+  timeouts.WriteTotalTimeoutMultiplier = 0;
+  if(!SetCommTimeouts(hSerial, &timeouts)) // Write the parameters
+    return -6;                             // Error while writting the parameters
+  return 1;                                // Opening successfull
 
 #endif
-#ifdef __linux__    
-    struct termios options;                                             // Structure with the device's options
+#ifdef __linux__
+  struct termios options; // Structure with the device's options
 
+  // Open device
+  fd = open(Device, O_RDWR | O_NOCTTY | O_NDELAY); // Open port
+  if(fd == -1)
+    return -2;                 // If the device is not open, return -1
+  fcntl(fd, F_SETFL, FNDELAY); // Open the device in nonblocking mode
 
-    // Open device
-    fd = open(Device, O_RDWR | O_NOCTTY | O_NDELAY);                    // Open port
-    if (fd == -1) return -2;                                            // If the device is not open, return -1
-    fcntl(fd, F_SETFL, FNDELAY);                                        // Open the device in nonblocking mode
-
-    // Set parameters
-    tcgetattr(fd, &options);                                            // Get the current options of the port
-    bzero(&options, sizeof(options));                                   // Clear all the options
-    speed_t         Speed;
-    switch (Bauds)                                                      // Set the speed (Bauds)
-    {
-    case 110  :     Speed=B110; break;
-    case 300  :     Speed=B300; break;
-    case 600  :     Speed=B600; break;
-    case 1200 :     Speed=B1200; break;
-    case 2400 :     Speed=B2400; break;
-    case 4800 :     Speed=B4800; break;
-    case 9600 :     Speed=B9600; break;
-    case 19200 :    Speed=B19200; break;
-    case 38400 :    Speed=B38400; break;
-    case 57600 :    Speed=B57600; break;
-    case 115200 :   Speed=B115200; break;
-    default : return -4;
-}
-    cfsetispeed(&options, Speed);                                       // Set the baud rate at 115200 bauds
-    cfsetospeed(&options, Speed);
-    options.c_cflag |= ( CLOCAL | CREAD |  CS8);                        // Configure the device : 8 bits, no parity, no control
-    options.c_iflag |= ( IGNPAR | IGNBRK );
-    options.c_cc[VTIME]=0;                                              // Timer unused
-    options.c_cc[VMIN]=0;                                               // At least on character before satisfy reading
-    tcsetattr(fd, TCSANOW, &options);                                   // Activate the settings
-    return (1);                                                         // Success
+  // Set parameters
+  tcgetattr(fd, &options);          // Get the current options of the port
+  bzero(&options, sizeof(options)); // Clear all the options
+  speed_t Speed;
+  switch(Bauds) // Set the speed (Bauds)
+  {
+    case 110: Speed = B110; break;
+    case 300: Speed = B300; break;
+    case 600: Speed = B600; break;
+    case 1200: Speed = B1200; break;
+    case 2400: Speed = B2400; break;
+    case 4800: Speed = B4800; break;
+    case 9600: Speed = B9600; break;
+    case 19200: Speed = B19200; break;
+    case 38400: Speed = B38400; break;
+    case 57600: Speed = B57600; break;
+    case 115200: Speed = B115200; break;
+    default: return -4;
+  }
+  cfsetispeed(&options, Speed); // Set the baud rate at 115200 bauds
+  cfsetospeed(&options, Speed);
+  options.c_cflag |= (CLOCAL | CREAD | CS8); // Configure the device : 8 bits, no parity, no control
+  options.c_iflag |= (IGNPAR | IGNBRK);
+  options.c_cc[VTIME] = 0;          // Timer unused
+  options.c_cc[VMIN] = 0;           // At least on character before satisfy reading
+  tcsetattr(fd, TCSANOW, &options); // Activate the settings
+  return (1);                       // Success
 #endif
 }
-
 
 /*!
      \brief Close the connection with the current device
 */
-void serialib::Close()
-{
-#if defined (_WIN32) || defined( _WIN64)
-    CloseHandle(hSerial);
+void
+serialib::Close() {
+#if defined(_WIN32) || defined(_WIN64)
+  CloseHandle(hSerial);
 #endif
 #ifdef __linux__
-    close (fd);
+  close(fd);
 #endif
 }
 
-
-
-
 //___________________________________________
 // ::: Read/Write operation on characters :::
-
-
 
 /*!
      \brief Write a char on the current serial port
@@ -257,26 +241,23 @@ void serialib::Close()
      \return 1 success
      \return -1 error while writting data
   */
-char serialib::WriteChar(const char Byte)
-{
-#if defined (_WIN32) || defined( _WIN64)
-    DWORD dwBytesWritten;                                               // Number of bytes written
-    if(!WriteFile(hSerial,&Byte,1,&dwBytesWritten,NULL))                // Write the char
-        return -1;                                                      // Error while writing
-    return 1;                                                           // Write operation successfull
+char
+serialib::WriteChar(const char Byte) {
+#if defined(_WIN32) || defined(_WIN64)
+  DWORD dwBytesWritten;                                    // Number of bytes written
+  if(!WriteFile(hSerial, &Byte, 1, &dwBytesWritten, NULL)) // Write the char
+    return -1;                                             // Error while writing
+  return 1;                                                // Write operation successfull
 #endif
 #ifdef __linux__
-    if (write(fd,&Byte,1)!=1)                                           // Write the char
-        return -1;                                                      // Error while writting
-    return 1;                                                           // Write operation successfull
+  if(write(fd, &Byte, 1) != 1) // Write the char
+    return -1;                 // Error while writting
+  return 1;                    // Write operation successfull
 #endif
 }
 
-
-
 //________________________________________
 // ::: Read/Write operation on strings :::
-
 
 /*!
      \brief Write a string on the current serial port
@@ -284,26 +265,24 @@ char serialib::WriteChar(const char Byte)
      \return 1 success
      \return -1 error while writting data
   */
-char serialib::WriteString(const char *String)
-{
-#if defined (_WIN32) || defined( _WIN64)
-    DWORD dwBytesWritten;                                               // Number of bytes written
-    if(!WriteFile(hSerial,String,strlen(String),&dwBytesWritten,NULL))  // Write the string
-        return -1;                                                      // Error while writing
-    return 1;                                                           // Write operation successfull
+char
+serialib::WriteString(const char* String) {
+#if defined(_WIN32) || defined(_WIN64)
+  DWORD dwBytesWritten;                                                  // Number of bytes written
+  if(!WriteFile(hSerial, String, strlen(String), &dwBytesWritten, NULL)) // Write the string
+    return -1;                                                           // Error while writing
+  return 1;                                                              // Write operation successfull
 #endif
 #ifdef __linux__
-    int Lenght=strlen(String);                                          // Lenght of the string
-    if (write(fd,String,Lenght)!=Lenght)                                // Write the string
-        return -1;                                                      // error while writing
-    return 1;                                                           // Write operation successfull
+  int Lenght = strlen(String);            // Lenght of the string
+  if(write(fd, String, Lenght) != Lenght) // Write the string
+    return -1;                            // error while writing
+  return 1;                               // Write operation successfull
 #endif
 }
 
 // _____________________________________
 // ::: Read/Write operation on bytes :::
-
-
 
 /*!
      \brief Write an array of data on the current serial port
@@ -312,22 +291,20 @@ char serialib::WriteString(const char *String)
      \return 1 success
      \return -1 error while writting data
   */
-char serialib::Write(const void *Buffer, const unsigned int NbBytes)
-{
-#if defined (_WIN32) || defined( _WIN64)
-    DWORD dwBytesWritten;                                               // Number of byte written
-    if(!WriteFile(hSerial, Buffer, NbBytes, &dwBytesWritten, NULL))     // Write data
-        return -1;                                                      // Error while writing
-    return 1;                                                           // Write operation successfull
+char
+serialib::Write(const void* Buffer, const unsigned int NbBytes) {
+#if defined(_WIN32) || defined(_WIN64)
+  DWORD dwBytesWritten;                                           // Number of byte written
+  if(!WriteFile(hSerial, Buffer, NbBytes, &dwBytesWritten, NULL)) // Write data
+    return -1;                                                    // Error while writing
+  return 1;                                                       // Write operation successfull
 #endif
 #ifdef __linux__
-    if (write (fd,Buffer,NbBytes)!=(ssize_t)NbBytes)                              // Write data
-        return -1;                                                      // Error while writing
-    return 1;                                                           // Write operation successfull
+  if(write(fd, Buffer, NbBytes) != (ssize_t)NbBytes) // Write data
+    return -1;                                       // Error while writing
+  return 1;                                          // Write operation successfull
 #endif
 }
-
-
 
 /*!
      \brief Wait for a byte from the serial device and return the data read
@@ -339,34 +316,33 @@ char serialib::Write(const void *Buffer, const unsigned int NbBytes)
      \return -1 error while setting the Timeout
      \return -2 error while reading the byte
   */
-char serialib::ReadChar(char *pByte,unsigned int TimeOut_ms)
-{
-#if defined (_WIN32) || defined(_WIN64)
+char
+serialib::ReadChar(char* pByte, unsigned int TimeOut_ms) {
+#if defined(_WIN32) || defined(_WIN64)
 
-    DWORD dwBytesRead = 0;
-    timeouts.ReadTotalTimeoutConstant=TimeOut_ms;                       // Set the TimeOut
-    if(!SetCommTimeouts(hSerial, &timeouts))                            // Write the parameters
-        return -1;                                                      // Error while writting the parameters
-    if(!ReadFile(hSerial,pByte, 1, &dwBytesRead, NULL))                 // Read the byte
-        return -2;                                                      // Error while reading the byte
-    if (dwBytesRead==0) return 0;                                       // Return 1 if the timeout is reached
-    return 1;                                                           // Success
+  DWORD dwBytesRead = 0;
+  timeouts.ReadTotalTimeoutConstant = TimeOut_ms;      // Set the TimeOut
+  if(!SetCommTimeouts(hSerial, &timeouts))             // Write the parameters
+    return -1;                                         // Error while writting the parameters
+  if(!ReadFile(hSerial, pByte, 1, &dwBytesRead, NULL)) // Read the byte
+    return -2;                                         // Error while reading the byte
+  if(dwBytesRead == 0)
+    return 0; // Return 1 if the timeout is reached
+  return 1;   // Success
 #endif
 #ifdef __linux__
-    TimeOut         Timer;                                              // Timer used for timeout
-    Timer.InitTimer();                                                  // Initialise the timer
-    while (Timer.ElapsedTime_ms()<TimeOut_ms || TimeOut_ms==0)          // While Timeout is not reached
-    {
-        switch (read(fd,pByte,1)) {                                     // Try to read a byte on the device
-        case 1  : return 1;                                             // Read successfull
-        case -1 : return -2;                                            // Error while reading
-        }
+  TimeOut Timer;                                                // Timer used for timeout
+  Timer.InitTimer();                                            // Initialise the timer
+  while(Timer.ElapsedTime_ms() < TimeOut_ms || TimeOut_ms == 0) // While Timeout is not reached
+  {
+    switch(read(fd, pByte, 1)) { // Try to read a byte on the device
+      case 1: return 1;          // Read successfull
+      case -1: return -2;        // Error while reading
     }
-    return 0;
+  }
+  return 0;
 #endif
 }
-
-
 
 /*!
      \brief Read a string from the serial device (without TimeOut)
@@ -378,25 +354,26 @@ char serialib::ReadChar(char *pByte,unsigned int TimeOut_ms)
      \return -2 error while reading the byte
      \return -3 MaxNbBytes is reached
   */
-int serialib::ReadStringNoTimeOut(char *String,char FinalChar,unsigned int MaxNbBytes)
-{
-    unsigned int    NbBytes=0;                                          // Number of bytes read
-    char            ret;                                                // Returned value from Read
-    while (NbBytes<MaxNbBytes)                                          // While the buffer is not full
-    {                                                                   // Read a byte with the restant time
-        ret=ReadChar(&String[NbBytes]);
-        if (ret==1)                                                     // If a byte has been read
-        {
-            if (String[NbBytes]==FinalChar)                             // Check if it is the final char
-            {
-                String  [++NbBytes]=0;                                  // Yes : add the end character 0
-                return NbBytes;                                         // Return the number of bytes read
-            }
-            NbBytes++;                                                  // If not, just increase the number of bytes read
-        }
-        if (ret<0) return ret;                                          // Error while reading : return the error number
+int
+serialib::ReadStringNoTimeOut(char* String, char FinalChar, unsigned int MaxNbBytes) {
+  unsigned int NbBytes = 0;   // Number of bytes read
+  char ret;                   // Returned value from Read
+  while(NbBytes < MaxNbBytes) // While the buffer is not full
+  {                           // Read a byte with the restant time
+    ret = ReadChar(&String[NbBytes]);
+    if(ret == 1) // If a byte has been read
+    {
+      if(String[NbBytes] == FinalChar) // Check if it is the final char
+      {
+        String[++NbBytes] = 0; // Yes : add the end character 0
+        return NbBytes;        // Return the number of bytes read
+      }
+      NbBytes++; // If not, just increase the number of bytes read
     }
-    return -3;                                                          // Buffer is full : return -3
+    if(ret < 0)
+      return ret; // Error while reading : return the error number
+  }
+  return -3; // Buffer is full : return -3
 }
 
 /*!
@@ -411,43 +388,43 @@ int serialib::ReadStringNoTimeOut(char *String,char FinalChar,unsigned int MaxNb
      \return -2 error while reading the byte
      \return -3 MaxNbBytes is reached
   */
-int serialib::ReadString(char *String,char FinalChar,unsigned int MaxNbBytes,unsigned int TimeOut_ms)
-{
-    if (TimeOut_ms==0)
-        return ReadStringNoTimeOut(String,FinalChar,MaxNbBytes);
+int
+serialib::ReadString(char* String, char FinalChar, unsigned int MaxNbBytes, unsigned int TimeOut_ms) {
+  if(TimeOut_ms == 0)
+    return ReadStringNoTimeOut(String, FinalChar, MaxNbBytes);
 
-    unsigned int    NbBytes=0;                                          // Number of bytes read
-    char            ret;                                                // Returned value from Read
-    TimeOut         Timer;                                              // Timer used for timeout
-    long int        TimeOutParam;
-    Timer.InitTimer();                                                  // Initialize the timer
+  unsigned int NbBytes = 0; // Number of bytes read
+  char ret;                 // Returned value from Read
+  TimeOut Timer;            // Timer used for timeout
+  long int TimeOutParam;
+  Timer.InitTimer(); // Initialize the timer
 
-    while (NbBytes<MaxNbBytes)                                          // While the buffer is not full
-    {                                                                   // Read a byte with the restant time
-        TimeOutParam=TimeOut_ms-Timer.ElapsedTime_ms();                 // Compute the TimeOut for the call of ReadChar
-        if (TimeOutParam>0)                                             // If the parameter is higher than zero
+  while(NbBytes < MaxNbBytes)                           // While the buffer is not full
+  {                                                     // Read a byte with the restant time
+    TimeOutParam = TimeOut_ms - Timer.ElapsedTime_ms(); // Compute the TimeOut for the call of ReadChar
+    if(TimeOutParam > 0)                                // If the parameter is higher than zero
+    {
+      ret = ReadChar(&String[NbBytes], TimeOutParam); // Wait for a byte on the serial link
+      if(ret == 1)                                    // If a byte has been read
+      {
+
+        if(String[NbBytes] == FinalChar) // Check if it is the final char
         {
-            ret=ReadChar(&String[NbBytes],TimeOutParam);                // Wait for a byte on the serial link            
-            if (ret==1)                                                 // If a byte has been read
-            {
-
-                if (String[NbBytes]==FinalChar)                         // Check if it is the final char
-                {
-                    String  [++NbBytes]=0;                              // Yes : add the end character 0
-                    return NbBytes;                                     // Return the number of bytes read
-                }
-                NbBytes++;                                              // If not, just increase the number of bytes read
-            }
-            if (ret<0) return ret;                                      // Error while reading : return the error number
+          String[++NbBytes] = 0; // Yes : add the end character 0
+          return NbBytes;        // Return the number of bytes read
         }
-        if (Timer.ElapsedTime_ms()>TimeOut_ms) {                        // Timeout is reached
-            String[NbBytes]=0;                                          // Add the end caracter
-            return 0;                                                   // Return 0
-        }
+        NbBytes++; // If not, just increase the number of bytes read
+      }
+      if(ret < 0)
+        return ret; // Error while reading : return the error number
     }
-    return -3;                                                          // Buffer is full : return -3
+    if(Timer.ElapsedTime_ms() > TimeOut_ms) { // Timeout is reached
+      String[NbBytes] = 0;                    // Add the end caracter
+      return 0;                               // Return 0
+    }
+  }
+  return -3; // Buffer is full : return -3
 }
-
 
 /*!
      \brief Read an array of bytes from the serial device (with timeout)
@@ -459,109 +436,102 @@ int serialib::ReadString(char *String,char FinalChar,unsigned int MaxNbBytes,uns
      \return -1 error while setting the Timeout
      \return -2 error while reading the byte
   */
-int serialib::Read (void *Buffer,unsigned int MaxNbBytes,unsigned int TimeOut_ms)
-{
-#if defined (_WIN32) || defined(_WIN64)
-    DWORD dwBytesRead = 0;
-    timeouts.ReadTotalTimeoutConstant=(DWORD)TimeOut_ms;                // Set the TimeOut
-    if(!SetCommTimeouts(hSerial, &timeouts))                            // Write the parameters
-        return -1;                                                      // Error while writting the parameters
-    if(!ReadFile(hSerial,Buffer,(DWORD)MaxNbBytes,&dwBytesRead, NULL))  // Read the bytes from the serial device
-        return -2;                                                      // Error while reading the byte
-    if (dwBytesRead!=(DWORD)MaxNbBytes) return 0;                       // Return 0 if the timeout is reached
-    return 1;                                                           // Success
+int
+serialib::Read(void* Buffer, unsigned int MaxNbBytes, unsigned int TimeOut_ms) {
+#if defined(_WIN32) || defined(_WIN64)
+  DWORD dwBytesRead = 0;
+  timeouts.ReadTotalTimeoutConstant = (DWORD)TimeOut_ms;                // Set the TimeOut
+  if(!SetCommTimeouts(hSerial, &timeouts))                              // Write the parameters
+    return -1;                                                          // Error while writting the parameters
+  if(!ReadFile(hSerial, Buffer, (DWORD)MaxNbBytes, &dwBytesRead, NULL)) // Read the bytes from the serial device
+    return -2;                                                          // Error while reading the byte
+  if(dwBytesRead != (DWORD)MaxNbBytes)
+    return 0; // Return 0 if the timeout is reached
+  return 1;   // Success
 #endif
 #ifdef __linux__
-    TimeOut          Timer;                                             // Timer used for timeout
-    Timer.InitTimer();                                                  // Initialise the timer
-    unsigned int     NbByteRead=0;
-    while (Timer.ElapsedTime_ms()<TimeOut_ms || TimeOut_ms==0)          // While Timeout is not reached
-    {
-        unsigned char* Ptr=(unsigned char*)Buffer+NbByteRead;           // Compute the position of the current byte
-        int Ret=read(fd,(void*)Ptr,MaxNbBytes-NbByteRead);              // Try to read a byte on the device
-        if (Ret==-1) return -2;                                         // Error while reading
-        if (Ret>0) {                                                    // One or several byte(s) has been read on the device
-            NbByteRead+=Ret;                                            // Increase the number of read bytes
-            if (NbByteRead>=MaxNbBytes)                                 // Success : bytes has been read
-                return 1;
-        }
+  TimeOut Timer;     // Timer used for timeout
+  Timer.InitTimer(); // Initialise the timer
+  unsigned int NbByteRead = 0;
+  while(Timer.ElapsedTime_ms() < TimeOut_ms || TimeOut_ms == 0) // While Timeout is not reached
+  {
+    unsigned char* Ptr = (unsigned char*)Buffer + NbByteRead; // Compute the position of the current byte
+    int Ret = read(fd, (void*)Ptr, MaxNbBytes - NbByteRead);  // Try to read a byte on the device
+    if(Ret == -1)
+      return -2;                   // Error while reading
+    if(Ret > 0) {                  // One or several byte(s) has been read on the device
+      NbByteRead += Ret;           // Increase the number of read bytes
+      if(NbByteRead >= MaxNbBytes) // Success : bytes has been read
+        return 1;
     }
-    return 0;                                                           // Timeout reached, return 0
+  }
+  return 0; // Timeout reached, return 0
 #endif
 }
 
-
-
-
 // _________________________
 // ::: Special operation :::
-
-
 
 /*!
     \brief Empty receiver buffer (UNIX only)
 */
 
-void serialib::FlushReceiver()
-{
+void
+serialib::FlushReceiver() {
 #ifdef __linux__
-    tcflush(fd,TCIFLUSH);
+  tcflush(fd, TCIFLUSH);
 #endif
 }
-
-
 
 /*!
     \brief  Return the number of bytes in the received buffer (UNIX only)
     \return The number of bytes in the received buffer
 */
-int serialib::Peek()
-{
-    int Nbytes=0;
+int
+serialib::Peek() {
+  int Nbytes = 0;
 #ifdef __linux__
-    ioctl(fd, FIONREAD, &Nbytes);
+  ioctl(fd, FIONREAD, &Nbytes);
 #endif
-    return Nbytes;
+  return Nbytes;
 }
 
 // ******************************************
 //  Class TimeOut
 // ******************************************
 
-
 /*!
     \brief      Constructor of the class TimeOut.
 */
 // Constructor
-TimeOut::TimeOut()
-{}
+TimeOut::TimeOut() {
+}
 
 /*!
     \brief      Initialise the timer. It writes the current time of the day in the structure PreviousTime.
 */
-//Initialize the timer
-void TimeOut::InitTimer()
-{
-    gettimeofday(&PreviousTime, NULL);
+// Initialize the timer
+void
+TimeOut::InitTimer() {
+  gettimeofday(&PreviousTime, NULL);
 }
 
 /*!
-    \brief      Returns the time elapsed since initialization.  It write the current time of the day in the structure CurrentTime.
-                Then it returns the difference between CurrentTime and PreviousTime.
-    \return     The number of microseconds elapsed since the functions InitTimer was called.
+    \brief      Returns the time elapsed since initialization.  It write the current time of the day in the structure
+   CurrentTime. Then it returns the difference between CurrentTime and PreviousTime. \return     The number of microseconds
+   elapsed since the functions InitTimer was called.
   */
-//Return the elapsed time since initialization
-unsigned long int TimeOut::ElapsedTime_ms()
-{
-    struct timeval CurrentTime;
-    int sec,usec;
-    gettimeofday(&CurrentTime, NULL);                                   // Get current time
-    sec=CurrentTime.tv_sec-PreviousTime.tv_sec;                         // Compute the number of second elapsed since last call
-    usec=CurrentTime.tv_usec-PreviousTime.tv_usec;                      // Compute
-    if (usec<0) {                                                       // If the previous usec is higher than the current one
-        usec=1000000-PreviousTime.tv_usec+CurrentTime.tv_usec;          // Recompute the microseonds
-        sec--;                                                          // Substract one second
-    }
-    return sec*1000+usec/1000;
+// Return the elapsed time since initialization
+unsigned long int
+TimeOut::ElapsedTime_ms() {
+  struct timeval CurrentTime;
+  int sec, usec;
+  gettimeofday(&CurrentTime, NULL);                              // Get current time
+  sec = CurrentTime.tv_sec - PreviousTime.tv_sec;                // Compute the number of second elapsed since last call
+  usec = CurrentTime.tv_usec - PreviousTime.tv_usec;             // Compute
+  if(usec < 0) {                                                 // If the previous usec is higher than the current one
+    usec = 1000000 - PreviousTime.tv_usec + CurrentTime.tv_usec; // Recompute the microseonds
+    sec--;                                                       // Substract one second
+  }
+  return sec * 1000 + usec / 1000;
 }
-

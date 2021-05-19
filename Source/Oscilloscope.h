@@ -21,34 +21,31 @@
 #ifndef OSCILLOSCOPE_H_INCLUDED
 #define OSCILLOSCOPE_H_INCLUDED
 
-class Oscilloscope : public Component, private Timer
-{
+class Oscilloscope : public Component, private Timer {
 public:
-    //==========================================================================
-    Oscilloscope()
-        : writePos (0)
-    {
-        startTimer (40);
-    }
-    
-    //==========================================================================
-void pushBuffer(const float* data, int numSamples);
-    
-    //==========================================================================
+  //==========================================================================
+  Oscilloscope() : writePos(0) { startTimer(40); }
+
+  //==========================================================================
+  void pushBuffer(const float* data, int numSamples);
+
+  //==========================================================================
   void paint(Graphics& g) override;
-    
+
+  void resized();
+
 private:
-    //==========================================================================
-    void timerCallback() override
-    {
-        repaint();
-    }
-    
-    //==========================================================================
-    std::array<float, 1024> buffer;
-    std::size_t writePos;
-    
-    const int bufferSize = 16384;
-    const int paintSize = 256;
+  //==========================================================================
+  void
+  timerCallback() override {
+    repaint();
+  }
+
+  //==========================================================================
+  std::array<float, 1024> buffer;
+  std::size_t writePos;
+
+  const int bufferSize = 16384;
+  const int paintSize = 256;
 };
-#endif  // OSCILLOSCOPE_H_INCLUDED
+#endif // OSCILLOSCOPE_H_INCLUDED

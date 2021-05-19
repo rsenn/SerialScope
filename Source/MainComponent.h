@@ -20,36 +20,35 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainContentComponent   : public Component, private Timer
-{
+class MainContentComponent : public Component, private Timer {
 public:
-    //==============================================================================
-    MainContentComponent();
-    ~MainContentComponent();
+  //==============================================================================
+  MainContentComponent();
+  ~MainContentComponent();
 
-	bool startPlotting(const String& port);
-    
-    
-    void paint (Graphics&) override;
-    void resized() override;
-    
-    Oscilloscope&
-    getOscilloscope() { return *scope; }
+  bool startPlotting(const String& port);
+
+  void paint(Graphics&) override;
+  void resized() override;
+
+  Oscilloscope&
+  getOscilloscope() {
+    return *scope;
+  }
 
 private:
+  void fillQueue();
+  void timerCallback() override;
 
-	void fillQueue();
-	  void timerCallback() override;
+  std::deque<unsigned char> recvQueue;
 
-   std::deque<unsigned char> recvQueue;
-    
-   unsigned int value;
+  unsigned int value;
 
-    ScopedPointer<Oscilloscope> scope;
+  Oscilloscope* scope;
 
-    ScopedPointer<serialib> serialPort;
+ serialib * serialPort;
 
-    //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
+  //==============================================================================
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainContentComponent)
 };
-#endif  // MAINCOMPONENT_H_INCLUDED
+#endif // MAINCOMPONENT_H_INCLUDED

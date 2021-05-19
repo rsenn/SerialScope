@@ -2,11 +2,10 @@
 
 <JUCERPROJECT id="zi1rQO" name="SerialScope" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.SerialScope" includeBinaryInAppConfig="1"
-              jucerVersion="5.4.1">
+              displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="GIt9Rh" name="SerialScope">
     <GROUP id="{F9CF7E15-BA4A-1A09-1747-73B1457F9512}" name="Source">
       <GROUP id="{C44FE864-6FA4-2FD3-5569-20D64A0E19E2}" name="serialib">
-        <FILE id="XsSnXx" name="Example1.cpp" compile="0" resource="0" file="Source/serialib/Example1.cpp"/>
         <FILE id="X2v8ZU" name="serialib.h" compile="0" resource="0" file="Source/serialib/serialib.h"/>
       </GROUP>
       <FILE id="amBibL" name="serialib.cpp" compile="1" resource="0" file="Source/serialib/serialib.cpp"/>
@@ -44,30 +43,7 @@
         <MODULEPATH id="juce_opengl" path="/opt/JUCE/modules"/>
       </MODULEPATHS>
     </VS2015>
-    <VS2013 targetFolder="Builds/VisualStudio2013">
-      <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
-        <CONFIGURATION name="Debug64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="1" optimisation="1" targetName="SerialScope" headerPath="../../Source/serial/include"/>
-        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
-        <CONFIGURATION name="Release64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
-                       isDebug="0" optimisation="3" targetName="SerialScope" headerPath="../../Source/serial/include"/>
-      </CONFIGURATIONS>
-      <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_cryptography" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_video" path="/opt/JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="/opt/JUCE/modules"/>
-      </MODULEPATHS>
-    </VS2013>
-    <LINUX_MAKE targetFolder="Builds/Linux" packages="freetype2">
+    <LINUX_MAKE targetFolder="Builds/Linux" packages="freetype2" extraDefs="JUCE_DISPLAY_SPLASH_SCREEN=0">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="SerialScope"
                        headerPath="../../Source/serial/include" libraryPath="/usr/X11R6/lib/"/>
@@ -126,16 +102,16 @@
     </MINGW_MAKE>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_core" showAllCode="1" useLocalCopy="1" overwriteOnSave="1"
-            useGlobalPath="0"/>
-    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_events" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_video" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" overwriteOnSave="1"
+            useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
   <JUCEOPTIONS/>
   <LIVE_SETTINGS>
